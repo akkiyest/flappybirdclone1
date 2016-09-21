@@ -13,7 +13,7 @@
 		F860A4011D83F6F6004C1918 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F860A4001D83F6F6004C1918 /* Assets.xcassets */; };
 		F860A4041D83F6F6004C1918 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F860A4021D83F6F6004C1918 /* LaunchScreen.storyboard */; };
 		F860A40C1D83F70E004C1918 /* SpriteKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F860A40B1D83F70E004C1918 /* SpriteKit.framework */; };
-		F860A40E1D83F7A7004C1918 /* Gamescene.swift in Sources */ = {isa = PBXBuildFile; fileRef = F860A40D1D83F7A7004C1918 /* Gamescene.swift */; };
+		F860A4121D92B254004C1918 /* Gamescene.swift in Sources */ = {isa = PBXBuildFile; fileRef = F860A4111D92B254004C1918 /* Gamescene.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -25,7 +25,7 @@
 		F860A4031D83F6F6004C1918 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		F860A4051D83F6F6004C1918 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F860A40B1D83F70E004C1918 /* SpriteKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SpriteKit.framework; path = System/Library/Frameworks/SpriteKit.framework; sourceTree = SDKROOT; };
-		F860A40D1D83F7A7004C1918 /* Gamescene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Gamescene.swift; sourceTree = "<group>"; };
+		F860A4111D92B254004C1918 /* Gamescene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Gamescene.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -62,7 +62,7 @@
 			children = (
 				F860A3F91D83F6F6004C1918 /* AppDelegate.swift */,
 				F860A3FB1D83F6F6004C1918 /* ViewController.swift */,
-				F860A40D1D83F7A7004C1918 /* Gamescene.swift */,
+				F860A4111D92B254004C1918 /* Gamescene.swift */,
 				F860A3FD1D83F6F6004C1918 /* Main.storyboard */,
 				F860A4001D83F6F6004C1918 /* Assets.xcassets */,
 				F860A4021D83F6F6004C1918 /* LaunchScreen.storyboard */,
@@ -144,7 +144,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F860A3FC1D83F6F6004C1918 /* ViewController.swift in Sources */,
-				F860A40E1D83F7A7004C1918 /* Gamescene.swift in Sources */,
+				F860A4121D92B254004C1918 /* Gamescene.swift in Sources */,
 				F860A3FA1D83F6F6004C1918 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -295,6 +295,7 @@
 				F860A40A1D83F6F6004C1918 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
