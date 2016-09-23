@@ -20,7 +20,7 @@ class Gamescene: SKScene, SKPhysicsContactDelegate {
     var itemscoreLabelNode:SKLabelNode!
     var bestScoreLabelNode:SKLabelNode!
     let userDefaults:NSUserDefaults = NSUserDefaults.standardUserDefaults()
-    
+    let sound = SKAction.playSoundFileNamed("itemsound.mp3", waitForCompletion: false)
 
     
     //当たり判定について定義する
@@ -292,22 +292,20 @@ class Gamescene: SKScene, SKPhysicsContactDelegate {
         } else if (contact.bodyA.categoryBitMask & itemCategory) == itemCategory || (contact.bodyB.categoryBitMask & itemCategory) == itemCategory {
             //アイテムと衝突したとき
             print("ITEM!")
+            runAction(sound)
             score += 5
             itemscore += 1
             //なぜか数値が動かないのでテストで追加
             self.itemscoreLabelNode.text = "item:\(itemscore)"
-            self.itemNode.removeAllChildren()
-            
+            contact.bodyB.node!.removeFromParent()
+
 
             
         }else {
             // 壁か地面と衝突した
             print("GameOver")
             itemNode.removeAllActions()
-            itemNode.removeAllChildren()
-            
-            //一時的に鳥を回せるように固定を外す
-            bird.physicsBody?.allowsRotation = true
+            itemNode.physicsBody?.collisionBitMask = birdCategory
             
             
             // スクロールを停止させる
@@ -337,8 +335,7 @@ class Gamescene: SKScene, SKPhysicsContactDelegate {
         bird.physicsBody?.velocity = CGVector.zero
         bird.physicsBody?.collisionBitMask = groundCategory | wallCategory
         bird.zRotation = 0.0
-        self.bird.physicsBody?.allowsRotation = false
-        
+        bird.physicsBody?.allowsRotation = false
         wallNode.removeAllChildren()
 
         
@@ -349,7 +346,7 @@ class Gamescene: SKScene, SKPhysicsContactDelegate {
     func setupScoreLabel() {
         score = 0
         itemscore = 0
-        var bestScore = userDefaults.integerForKey("BEST")
+        let bestScore = userDefaults.integerForKey("BEST")
         
         scoreLabelNode = SKLabelNode()
         scoreLabelNode.fontColor = UIColor.blackColor()
@@ -397,38 +394,53 @@ class Gamescene: SKScene, SKPhysicsContactDelegate {
         // 2つのアニメーションを順に実行するアクションを作成
         let itemAnimation = SKAction.sequence([moveItem, removeItem])
         
+
         
         
-        //最小3秒、最大10秒にアイテムを生み出すのをブロック化する
+        
+        //最小5秒、最大15秒にアイテムを生み出すのをブロック化する
         var waitsec:Double?
         let itemrespawnrantime = SKAction.runBlock({
-            waitsec = self.randomnum()
+            waitsec = self.randomnum() + 5
             let waitAnimation = SKAction.waitForDuration(waitsec!)
             self.runAction(waitAnimation)
+            
         })
         
         
         let createItemAnimation = SKAction.runBlock({
             // アイテム関連のノードを乗せるノードを作成
             let item = SKSpriteNode(texture: itemTexture)
-            let item_y:Double = self.randomnum() * 10
-            let item_yf:CGFloat = CGFloat(item_y)
-            item.position = CGPoint(x:self.frame.size.width ,y:item_yf)
+            //ランダムな高さを決める（要確認）
+            //let item_y:Double = self.randomnum()
+            //let item_yf:CGFloat = CGFloat(item_y)
+            //item.position = CGPoint(x:self.frame.size.width ,y:item_yf)
+            // 画面のY軸の中央値(壁より引用）
+            //let center_y = self.frame.size.height / 2
+            // 壁のY座標を上下ランダムにさせるときの最大値（壁より引用）
+            //let random_y_range = self.frame.size.height / 4
+            // アイテムの高さをランダムにする
+            //let item_y = CGFloat( center_y - item.size.height / 2 -  random_y_range / 2)
+            item.position = CGPoint(x:self.frame.size.width ,y:self.frame.size.height)
             item.zPosition = -50.0 // 雲より手前、地面より奥
-            item.physicsBody?.dynamic = false
             item.physicsBody = SKPhysicsBody(circleOfRadius: item.size.height / 2.0)
-            item.physicsBody?.velocity = CGVector.zero
+            item.physicsBody?.dynamic = true
+            //落として跳ねるような感じにする
+            item.physicsBody?.affectedByGravity = true
+            item.physicsBody?.restitution = 1
+            item.physicsBody?.velocity = CGVector(dx:0 , dy:2)
             item.physicsBody?.categoryBitMask = self.itemCategory
             item.physicsBody?.contactTestBitMask = self.birdCategory
             self.itemNode.addChild(item)
+            item.runAction(itemrespawnrantime)
         })
         
-        let repeatItemRespawn = SKAction.repeatActionForever(SKAction.sequence([itemAnimation, createItemAnimation, itemrespawnrantime]))
-        runAction(repeatItemRespawn)
+        let repeatItemRespawn = SKAction.repeatActionForever(SKAction.sequence([itemAnimation, createItemAnimation]))
+            runAction(repeatItemRespawn)
     }
     
     func randomnum() -> Double {
-        let randomnumber = arc4random_uniform(10).hashValue
+        let randomnumber = arc4random_uniform(1).hashValue
         let randomnumdouble:Double = Double(randomnumber)
         return randomnumdouble
     }
