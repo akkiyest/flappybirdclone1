@@ -346,7 +346,7 @@ class Gamescene: SKScene, SKPhysicsContactDelegate {
     func setupScoreLabel() {
         score = 0
         itemscore = 0
-        let bestScore = userDefaults.integerForKey("BEST")
+        var bestScore = userDefaults.integerForKey("BEST")
         
         scoreLabelNode = SKLabelNode()
         scoreLabelNode.fontColor = UIColor.blackColor()
