@@ -244,7 +244,7 @@ class Gamescene: SKScene, SKPhysicsContactDelegate {
         
         // 衝突のカテゴリー設定
         bird.physicsBody?.categoryBitMask = birdCategory // ←追加
-        bird.physicsBody?.collisionBitMask = groundCategory | wallCategory | itemCategory // ←追加
+        bird.physicsBody?.collisionBitMask = groundCategory | wallCategory // ←追加
         bird.physicsBody?.contactTestBitMask = groundCategory | wallCategory | itemCategory // ←追加
         
         // スプライトを追加する
@@ -287,18 +287,27 @@ class Gamescene: SKScene, SKPhysicsContactDelegate {
                 bestScoreLabelNode.text = "Best Score:\(bestScore)"
                 userDefaults.setInteger(bestScore, forKey: "BEST")
                 userDefaults.synchronize()
-                self.addChild(bestScoreLabelNode)
             }
         } else if (contact.bodyA.categoryBitMask & itemCategory) == itemCategory || (contact.bodyB.categoryBitMask & itemCategory) == itemCategory {
             //アイテムと衝突したとき
+            
             print("ITEM!")
             runAction(sound)
             score += 5
             itemscore += 1
+
+            contact.bodyB.node!.removeFromParent()
+            
+            var bestScore = userDefaults.integerForKey("BEST")
+            if score > bestScore {
+                bestScore = score
+                bestScoreLabelNode.text = "Best Score:\(bestScore)"
+                userDefaults.setInteger(bestScore, forKey: "BEST")
+                userDefaults.synchronize()
+            }
             //なぜか数値が動かないのでテストで追加
             self.itemscoreLabelNode.text = "item:\(itemscore)"
-            contact.bodyB.node!.removeFromParent()
-
+            self.scoreLabelNode.text = "Score:\(score)"
 
             
         }else {
@@ -346,7 +355,7 @@ class Gamescene: SKScene, SKPhysicsContactDelegate {
     func setupScoreLabel() {
         score = 0
         itemscore = 0
-        var bestScore = userDefaults.integerForKey("BEST")
+        let bestScore = userDefaults.integerForKey("BEST")
         
         scoreLabelNode = SKLabelNode()
         scoreLabelNode.fontColor = UIColor.blackColor()
